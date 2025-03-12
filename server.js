@@ -17,6 +17,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/perfumes', require('./routes/perfumeRoutes'));
 app.use('/api/brands', require('./routes/brandRoutes'));
 app.use('/api/members', require('./routes/memberRoutes'));
+app.use('/api/feedback', require('./routes/feedbackRoutes')); // ✅ Thêm API feedback
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Member = require('../models/Member'); // Đảm bảo import đúng model
+const Member = require('../models/Member');
 
 const auth = (req, res, next) => {
     const token = req.header("x-auth-token");
@@ -27,4 +27,4 @@ const adminAuth = async (req, res, next) => {
     }
 };
 
-module.exports = { auth, adminAuth }; // Đảm bảo export đúng
+module.exports = { auth, adminAuth };

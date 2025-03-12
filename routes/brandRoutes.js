@@ -1,6 +1,7 @@
 const express = require('express');
 const { auth, adminAuth } = require('../middleware/auth');
 const Brand = require('../models/Brand');
+const Perfume = require('../models/Perfume'); // Thêm model nước hoa
 
 const router = express.Router();
 
@@ -51,12 +52,19 @@ router.put('/:brandId', auth, adminAuth, async (req, res) => {
     }
 });
 
-// 📌 Xóa thương hiệu theo ID (Chỉ Admin)
+// 📌 Xóa thương hiệu theo ID (Chỉ Admin) + Xóa luôn nước hoa thuộc Brand đó
 router.delete('/:brandId', auth, adminAuth, async (req, res) => {
     try {
-        const deletedBrand = await Brand.findByIdAndDelete(req.params.brandId);
-        if (!deletedBrand) return res.status(404).json({ error: "Brand not found" });
-        res.json({ message: "Brand deleted successfully!" });
+        const brand = await Brand.findById(req.params.brandId);
+        if (!brand) return res.status(404).json({ error: "Brand not found" });
+
+        // 🛑 Xóa tất cả nước hoa thuộc brand này
+        await Perfume.deleteMany({ brand: brand._id });
+
+        // 🛑 Xóa brand
+        await Brand.findByIdAndDelete(req.params.brandId);
+
+        res.json({ message: "Brand and all related perfumes deleted successfully!" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
